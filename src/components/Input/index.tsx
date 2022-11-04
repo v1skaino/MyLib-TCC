@@ -1,67 +1,107 @@
 import styled from "styled-components";
 import { colors } from "../../styles/colors";
-import { ColorsType } from "../../styles/colors/types";
 import { fontConfig, fontSize } from "../../styles/fonts";
 
-interface LabelProps {
+interface InputProps {
+  width: string;
   label: string;
-  height: number;
-  placeholder: string;
-  width: number;
-  type: string;
-  onChange: any;
+  onChange?: (e: any) => void;
+  readOnly?: boolean;
+  value?: string;
+  defaultValue?: string;
+  type?: string;
+  max?: number;
+  error?: boolean;
+  errorMessage?: string;
+  labelColor: string;
+  onClick?: () => void;
 }
 
 export const Input = ({
-  label,
-  height,
-  placeholder,
   width,
-  type,
+  label,
   onChange,
-}: LabelProps) => {
+  readOnly,
+  value,
+  defaultValue,
+  type,
+  max,
+  error,
+  errorMessage,
+  labelColor,
+  onClick,
+}: InputProps) => {
   return (
-    <Container width={width}>
-      <Label colors={colors}>{label}</Label>
-      <InputStyle
-        type={type}
-        height={height}
-        colors={colors}
-        placeholder={placeholder}
-        onChange={onChange}
-      ></InputStyle>
+    <Container onClick={onClick} color={labelColor} width={width}>
+      <div className="inputGroup">
+        <input
+          onChange={onChange}
+          value={value}
+          readOnly={readOnly}
+          defaultValue={defaultValue}
+          type={type}
+          autoComplete="off"
+          maxLength={max}
+        />
+        <label htmlFor="name">{label}</label>
+        {error ? <ErrorLabel>{errorMessage}</ErrorLabel> : null}
+      </div>
     </Container>
   );
 };
 
-const Container = styled.div<{ width: number }>`
-  display: flex;
+const Container = styled.div<{ width: string; color: string }>`
+  width: ${({ width }) => width};
   height: auto;
-  width: ${({ width }) => width}%;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-`;
+  .inputGroup {
+    font-family: ${fontConfig.roboto};
+    margin: 1em 0 1em 0;
+    position: relative;
+  }
 
-const InputStyle = styled.input<{ colors: ColorsType; height: number }>`
-  border-radius: 5px;
-  border: 1px solid;
-  width: 100%;
-  color: ${({ colors }) => colors.primary};
-  border-color: ${({ colors }) => colors.grey};
-  height: ${({ height }) => height}px;
-  font-weight: ${fontConfig.weight.regular};
-  font-family: ${fontConfig.roboto};
-  outline: none;
-  ::placeholder {
-    color: ${({ colors }) => colors.grey02};
+  .inputGroup input {
+    font-size: ${fontSize.small};
+    padding: 0.8em;
+    outline: none;
+    border: 1px solid ${colors.lineColor};
+    background-color: transparent;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .inputGroup label {
+    font-size: ${fontSize.small}px;
+    position: absolute;
+    color: ${({ color }) => color};
+    left: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    transform: translateY(-50%) scale(0.9);
+    margin: 0em;
+    margin-left: 0.5em;
+    padding: 0.4em;
+    background-color: ${colors.white};
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
   }
 `;
 
-const Label = styled.label<{ colors: ColorsType }>`
-  color: ${({ colors }) => colors.primary};
-  font-weight: ${fontConfig.weight.regular};
-  font-family: ${fontConfig.roboto};
-  font-size: ${fontSize.medium}px;
-  margin-bottom: 4px;
+const ErrorLabel = styled.p`
+  font-size: ${fontSize.small}px;
+  color: ${colors.red};
+  margin: 4px 0px 0px 5px;
 `;

@@ -8,6 +8,7 @@ interface SubmitButtonProps {
   height: number;
   width: number;
   filled: boolean;
+  onPress: () => void;
 }
 
 export const SubmitButton = ({
@@ -15,15 +16,16 @@ export const SubmitButton = ({
   height,
   width,
   filled,
+  onPress,
 }: SubmitButtonProps) => {
   return (
     <Container width={width}>
       {filled ? (
-        <Button height={height} colors={colors}>
+        <Button onClick={onPress} height={height} colors={colors}>
           {label}
         </Button>
       ) : (
-        <OutlinedButton height={height} colors={colors}>
+        <OutlinedButton onClick={onPress} height={height} colors={colors}>
           {label}
         </OutlinedButton>
       )}

@@ -6,4 +6,6 @@ export interface ColorsType {
   grey03: string;
   grey04: string;
   black: string;
+  lineColor: string;
+  red: string;
 }

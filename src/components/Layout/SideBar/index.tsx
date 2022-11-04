@@ -1,64 +1,145 @@
-import { useNavigate } from "react-router-dom";
+import { MdOutlineNavigateNext } from "react-icons/md";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { useState } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { colors } from "../../../styles/colors";
-import { ColorsType } from "../../../styles/colors/types";
-import { fontConfig, fontSize } from "../../../styles/fonts";
 
-export const SideBar = () => {
-  const navigation = useNavigate();
+export const SideBarMenu = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [collapsed, setCollapsed] = useState(true);
+
+  const routes = [
+    {
+      route: "/dashboard",
+      name: "Dashboard",
+    },
+    {
+      route: "/clients",
+      name: "Clientes",
+    },
+    {
+      route: "/vehicles",
+      name: "Veículos",
+    },
+    {
+      route: "/billing",
+      name: "Faturamento",
+    },
+  ];
 
   return (
-    <Container colors={colors}>
-      <Logo
-        onClick={() => navigation("/")}
-        src={require("../../../assets/images/LogoMyLibW.png")}
-        alt="Logo"
-      />
-      <Links>
-        <Route colors={colors}>Venda</Route>
-        <Route colors={colors}>Estoque</Route>
-        <Route colors={colors}>Histórico</Route>
-        <Route colors={colors}>Produtos</Route>
-      </Links>
+    <Container>
+      <Content>
+        <Burguer>
+          <GiHamburgerMenu
+            onClick={() => setCollapsed(!collapsed)}
+            className="hamburguer"
+            size={20}
+          />
+        </Burguer>
+
+        {collapsed ? (
+          <>
+            <div>
+              {routes.map((e, index) => {
+                return location.pathname !== e.route ? (
+                  <Item key={index} onClick={() => navigate(`${e.route}`)}>
+                    {e.name}
+                  </Item>
+                ) : (
+                  <ActiveItem
+                    key={index}
+                    onClick={() => navigate(`${e.route}`)}
+                  >
+                    <div></div>
+                    {e.name}
+                    <MdOutlineNavigateNext size={20} color={colors.lineColor} />
+                  </ActiveItem>
+                );
+              })}
+            </div>
+          </>
+        ) : null}
+      </Content>
     </Container>
   );
 };
 
-const Container = styled.div<{ colors: ColorsType }>`
-  width: 250px;
-  height: 100vh;
-  background-color: ${({ colors }) => colors.primary};
+export const Container = styled.div`
+  display: grid;
+  grid-area: SB;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+  border: 1px solid ${colors.lineColor};
+  border-top: 0;
+  background-color: ${colors.white};
   display: flex;
-  align-items: center;
-  flex-direction: column;
   justify-content: space-between;
-`;
-
-const Links = styled.div`
-  width: 100%;
-  height: 60%;
-  display: flex;
   flex-direction: column;
-  align-items: center;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
 `;
 
-const Logo = styled.img`
-  width: 90%;
-  padding: 20px;
-  cursor: pointer;
-`;
-
-const Route = styled.div<{ colors: ColorsType }>`
-  border-top: 1px solid ${({ colors }) => colors.white};
-  color: ${({ colors }) => colors.white};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  font-weight: ${fontConfig.weight.book};
-  font-size: ${fontSize.bigger001}px;
-  font-family: ${fontConfig.roboto};
+const Item = styled.div`
   width: 100%;
+  border-bottom: 1px solid ${colors.lineColor};
+  height: 60px;
   cursor: pointer;
+  transition: 0.5s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  :hover {
+    background-color: ${colors.lineColor};
+  }
+`;
+
+const Burguer = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${colors.lineColor};
+  height: 60px;
+  padding-right: 20px;
+  display: none;
+
+  .hamburguer {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .hamburguer {
+      display: flex;
+      cursor: pointer;
+    }
+  }
+`;
+
+const ActiveItem = styled.div`
+  width: 100%;
+  border-bottom: 1px solid ${colors.lineColor};
+  border-left: 3px solid ${colors.primary};
+  height: 60px;
+  cursor: pointer;
+  transition: 0.5s;
+  color: ${colors.primary};
+
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  align-items: center;
+
+  :hover {
+    background-color: ${colors.lineColor};
+  }
 `;

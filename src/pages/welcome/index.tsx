@@ -1,32 +1,31 @@
 import { FaFacebookSquare, FaLinkedin, FaTwitterSquare } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Label from "../../../components/Label";
-import { colors } from "../../../styles/colors";
-import { ColorsType } from "../../../styles/colors/types";
-import { fontConfig, fontSize } from "../../../styles/fonts";
-import { WelcomePropsType } from "../types/Welcome.types";
-
-const WelcomeLayout = ({ data }: WelcomePropsType) => {
+import { SvgCar } from "../../assets/svgs/car.svg";
+import Label from "../../components/Label";
+import { SubmitButton } from "../../components/SubmitButton";
+import { colors } from "../../styles/colors";
+import { ColorsType } from "../../styles/colors/types";
+import { fontConfig, fontSize } from "../../styles/fonts";
+const Welcome = () => {
+  const navigate = useNavigate();
   return (
     <Container>
       <InfoContainer colors={colors}>
-        <Logo
-          src={require("../../../assets/images/LogoMyLibW.png")}
-          alt="Logo"
-        />
+        <Logo src={require("../../assets/images/LogoMyLibW.png")} alt="Logo" />
         <Label
           color={colors.white}
           fontWeight={fontConfig.weight.book}
           size={fontSize.bigger003}
         >
-          MyLib - O melhor amigo do seu negócio
+          MyLib - O melhor amigo do seu estacionamento
         </Label>
         <Label
           color={colors.white}
           size={fontSize.large}
           fontWeight={fontConfig.weight.book}
           textAlign={"center"}
-          pad={"20px"}
+          pad={"20px 70px"}
         >
           Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod
           tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -48,6 +47,16 @@ const WelcomeLayout = ({ data }: WelcomePropsType) => {
           </a>
         </Icons>
       </InfoContainer>
+      <LeftSide>
+        <SvgCar color={colors.primary} width="300" height="300" />
+        <SubmitButton
+          filled={true}
+          onPress={() => navigate("/dashboard")}
+          height={45}
+          label={"Get started"}
+          width={35}
+        />
+      </LeftSide>
     </Container>
   );
 };
@@ -61,7 +70,7 @@ const Container = styled.div`
 //Purple Side - Info
 
 const InfoContainer = styled.div<{ colors: ColorsType }>`
-  width: 55%;
+  width: 60%;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -82,4 +91,13 @@ const Icons = styled.div`
   align-items: center;
 `;
 
-export default WelcomeLayout;
+const LeftSide = styled.div`
+  width: 40%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+export default Welcome;

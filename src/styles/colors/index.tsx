@@ -8,4 +8,6 @@ export const colors: ColorsType = {
   grey03: "#666",
   grey04: "#333",
   black: "#000",
+  lineColor: "#ebebeb",
+  red: "#FF9494",
 };
